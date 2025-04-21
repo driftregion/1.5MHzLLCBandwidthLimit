@@ -1,0 +1,18 @@
+cff-version: 1.2.0
+title: 1.5MHzLLCBandwidthLimit
+message: >-
+  If you use this software, please cite it using the
+  metadata from this file.
+type: software
+authors:
+  - given-names: Nick
+    family-names: Kirkby
+    email: njk@asu.edu
+    orcid: 'https://orcid.org/0009-0001-0084-6220'
+repository-code: 'https://github.com/driftregion/1.5MHzLLCBandwidthLimit'
+abstract: >- Finding the Control Bandwidth Limit of a 1.5 MHz LLC Converter
+keywords:
+license: Proprietary
+commit: e040cbf
+version: v0.0.0
+date-released: '2025-04-21'

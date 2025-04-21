@@ -50,235 +50,251 @@
 
 \begin{document}
 \title{Influence of Loop Delay on \\LLC Converter Control Bandwidth}
-%
-%
-% author names and IEEE memberships
-% note positions of commas and nonbreaking spaces ( ~ ) LaTeX will not break
-% a structure at a ~ so this keeps an author's name from being broken across
-% two lines.
-% use \thanks{} to gain access to the first footnote area
-% a separate \thanks must be used for each paragraph as LaTeX2e's \thanks
-% was not built to handle multiple paragraphs
-%
 
-\author{Nick~James~Kirkby,~\IEEEmembership{Student Member,~IEEE, njk@asu.edu} % <-this % stops a space
-\thanks{M. Shell was with the Department
-of Electrical and Computer Engineering, Georgia Institute of Technology, Atlanta,
-GA, 30332 USA e-mail: (see http://www.michaelshell.org/contact.html).}% <-this % stops a space
-\thanks{J. Doe and J. Doe are with Anonymous University.}% <-this % stops a space
-\thanks{Manuscript received April 19, 2005; revised August 26, 2015.}}
+\author{Nick~James~Kirkby,~\IEEEmembership{Student Member,~IEEE, njk@asu.edu}} % <-this % stops a space
 
-% note the % following the last \IEEEmembership and also \thanks - 
-% these prevent an unwanted space from occurring between the last author name
-% and the end of the author line. i.e., if you had this:
-% 
-% \author{....lastname \thanks{...} \thanks{...} }
-%                     ^------------^------------^----Do not want these spaces!
-%
-% a space would be appended to the last name and could cause every name on that
-% line to be shifted left slightly. This is one of those "LaTeX things". For
-% instance, "\textbf{A} \textbf{B}" will typeset as "A B" not "AB". To get
-% "AB" then you have to do: "\textbf{A}\textbf{B}"
-% \thanks is no different in this regard, so shield the last } of each \thanks
-% that ends a line with a % and do not let a space in before the next \thanks.
-% Spaces after \IEEEmembership other than the last one are OK (and needed) as
-% you are supposed to have spaces between the names. For what it is worth,
-% this is a minor point as most people would not even notice if the said evil
-% space somehow managed to creep in.
-
-
-
-% The paper headers go here
 \markboth{}
 {Shell \MakeLowercase{\textit{et al.}}: Influence of Loop Delay on LLC Converter}
-% The only time the second header will appear is for the odd numbered pages
-% after the title page when using the twoside option.
-% 
-% *** Note that you probably will NOT want to include the author's ***
-% *** name in the headers of peer review papers.                   ***
-% You can use \ifCLASSOPTIONpeerreview for conditional compilation here if
-% you desire.
 
 
-
-
-% If you want to put a publisher's ID mark on the page you can do it like
-% this:
-%\IEEEpubid{0000--0000/00\$00.00~\copyright~2015 IEEE}
-% Remember, if you use this you must call \IEEEpubidadjcol in the second
-% column for its text to clear the IEEEpubid mark.
-
-
-
-% use for special paper notices
-%\IEEEspecialpapernotice{(Invited Paper)}
-
-
-
-
-% make the title area
 \maketitle
 
-% As a general rule, do not put math, special symbols or citations
-% in the abstract or keywords.
 \begin{abstract}
-A 1.5 MHz LLC converter is modeled analytically and in simulation to answer the question: what is the upper limit on stable control bandwidth given the sensing, computation, and actuation delays of the TMS320F28379D SOC ?
+A 1.5 MHz LLC converter is modeled analytically and in simulation to answer the question: what is the upper limit on stable control bandwidth given the sensing, computation, and actuation delays of the TMS320F28379D SOC?
 \end{abstract}
 
-% Note that keywords are not normally used for peerreview papers.
 \begin{IEEEkeywords}
 LLC converter, delay modeling.
 \end{IEEEkeywords}
 
 
-
-% For peer review papers, you can put extra information on the cover
-% page as needed:
-% \ifCLASSOPTIONpeerreview
-% \begin{center} \bfseries EDICS Category: 3-BBND \end{center}
-% \fi
-%
-% For peerreview papers, this IEEEtran command inserts a page break and
-% creates the second title. It will be ignored for other modes.
 \IEEEpeerreviewmaketitle
 
 
-
 \section{Introduction}
-% The very first letter is a 2 line initial drop letter followed
-% by the rest of the first word in caps.
-% 
-% form to use if the first word consists of a single letter:
-% \IEEEPARstart{A}{demo} file is ....
-% 
-% form to use if you need the single drop letter followed by
-% normal text (unknown if ever used by the IEEE):
-% \IEEEPARstart{A}{}demo file is ....
-% 
-% Some journals put the first two words in caps:
-% \IEEEPARstart{T}{his demo} file is ....
-% 
-% Here we have the typical use of a "T" for an initial drop letter
-% and "HIS" in caps to complete the first word.
 \IEEEPARstart{P}{ower} converters such as the LLC are increasingly pushed to switching frequencies greater than 1 MHz to achieve miniaturization. 
 At these high switching frequencies, delays due to sensing, control, and actuation may significantly reduce the closed-loop control bandwidth.
-Optimizing a feedback control system based on a signal processing IC such as the TMS320 series from Texas Instruments requires understanding of the sensor bandwidth, ADC bandwith, ADC sampling time, control algorithm complexity, as well as the modulation scheme to fully quantify the total delay time from sensing to actuation. 
+This paper investigates the influence of these delays on the control bandwidth of a 1.5 MHz LLC converter.
 
-\section{LLC Converter Plant Model}
+\section{System Model}
 
-\subsection{Subsection Heading Here}
-Subsection text here.
+The system model is shown in Figure \ref{fig:feedback_diagram}. 
+It consists of a plant $G_p(s)$, a controller $G_c(s)$, and a feedback delay $G_D(s)$.
+The achievable control bandwidth may be limited by any of the three components in the feedback loop.
+The aim of this project is to determine which of $ \{ G_c(s), G_p(s), G_D(s) \} $ limits the control bandwidth of the LLC converter implementation described in section \ref{sec:LLC_converter}.
 
-% needed in second column of first page if using \IEEEpubid
-%\IEEEpubidadjcol
-
-\subsubsection{Subsubsection Heading Here}
-Subsubsection text here.
-
-
-% An example of a floating figure using the graphicx package.
-% Note that \label must occur AFTER (or within) \caption.
-% For figures, \caption should occur after the \includegraphics.
-% Note that IEEEtran v1.7 and later has special internal code that
-% is designed to preserve the operation of \label within \caption
-% even when the captionsoff option is in effect. However, because
-% of issues like this, it may be the safest practice to put all your
-% \label just after \caption rather than within \caption{}.
-%
-% Reminder: the "draftcls" or "draftclsnofoot", not "draft", class
-% option should be used if it is desired that the figures are to be
-% displayed while in draft mode.
-%
-%\begin{figure}[!t]
-%\centering
-%\includegraphics[width=2.5in]{myfigure}
-% where an .eps filename suffix will be assumed under latex, 
-% and a .pdf suffix will be assumed for pdflatex; or what has been declared
-% via \DeclareGraphicsExtensions.
-%\caption{Simulation results for the network.}
-%\label{fig_sim}
-%\end{figure}
-
-% Note that the IEEE typically puts floats only at the top, even when this
-% results in a large percentage of a column being occupied by floats.
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.5\textwidth]{figures/feedback_diagram.png}
+  \caption{Feedback system model showing the plant $G_p(s)$, the controller $G_c(s)$, and the feedback delay $G_D(s)$.}
+  \label{fig:feedback_diagram}
+\end{figure}
 
 
-% An example of a double column floating figure using two subfigures.
-% (The subfig.sty package must be loaded for this to work.)
-% The subfigure \label commands are set within each subfloat command,
-% and the \label for the overall figure must come after \caption.
-% \hfil is used as a separator to get equal spacing.
-% Watch out that the combined width of all the subfigures on a 
-% line do not exceed the text width or a line break will occur.
-%
-%\begin{figure*}[!t]
-%\centering
-%\subfloat[Case I]{\includegraphics[width=2.5in]{box}%
-%\label{fig_first_case}}
-%\hfil
-%\subfloat[Case II]{\includegraphics[width=2.5in]{box}%
-%\label{fig_second_case}}
-%\caption{Simulation results for the network.}
-%\label{fig_sim}
-%\end{figure*}
-%
-% Note that often IEEE papers with subfigures do not employ subfigure
-% captions (using the optional argument to \subfloat[]), but instead will
-% reference/describe all of them (a), (b), etc., within the main caption.
-% Be aware that for subfig.sty to generate the (a), (b), etc., subfigure
-% labels, the optional argument to \subfloat must be present. If a
-% subcaption is not desired, just leave its contents blank,
-% e.g., \subfloat[].
+\section{Plant Model}
+
+Dynamic modeling of LLC converters is an active research area. 
+The LLC converter is a nonlinear plant -- its dynamics vary as a function of both the control variable $f_s$ and also the load resistance $R_L$. 
+The author selected Tian's plant transfer functions as derived in \cite{tian_equivalent_2020} as the basis for the plant model $G_p$. 
+
+Tian's model has more than ten parameters. 
+To check that the model was implemented correctly, the author compared the frequency response of the analytical plant model to the frequency response of a PLECS simulation of the same converter.
+
+\subsection{Consistency between Analytical and Simulation Models}
+
+Validation of the analytical model in simulation proved challenging as the LLC is frequency modulated and circuit simulation softwares vary greatly in their abilities to extract frequency response information from frequency-modulated switching converters.
+An LLC converter was modeled in PLECS based on an example implemenation and multitone analysis \cite{plecs_analysis_2022} was used to extract its frequency response. 
+The circuit is shown in Figure \ref{fig:PLECS_LLC}, where the small-signal perturbation is applied to the switching frequency $\omega_s$ and the output voltage $v_{o}$ is the response.
+
+\begin{figure}
+  \centering
+  \includegraphics[width=0.5\textwidth]{figures/PLECS_LLC_schematic.png}
+  \caption{LLC converter as modeled in PLECS and used to reproduce Tian's simuluation results.}
+  \label{fig:PLECS_LLC}
+\end{figure}
+
+Initial comparison between simulated frequency response and the analytical transfer functions created using Tian's method did not agree. The comparison is shown in Figure \ref{fig:PLECS_Tian_comparison} where each model is evaluated using the converter parameters from Fig. 22 of \cite{tian_equivalent_2020}. The outputs agree closely for the $F_s = 1.4 F_o$ case, but disagree for the remaining two cases.
+
+\begin{figure}
+  \centering
+  \includegraphics[width=0.5\textwidth]{figures/tian_vs_PLECS_disagreement.png}
+  \caption{Comparison of simulated frequency responses of the same converter implemented in PLECS (dashed lines) and $G_p(s)$ using Tian's method (solid lines) at ${F_s=\{1.4, 1.0, 0.8\}F_o}$ using converter parameters from Fig. 22 of \cite{tian_equivalent_2020}. The discrepancy was found to stem from nonideal diode models used in the PLECS simulation.}
+  \label{fig:PLECS_Tian_comparison}
+\end{figure}
+
+To gain confidence in the simulated frequency response results, the PLECS multitone analysis was compared alongside Tian's SIMPLIS implementation. 
+The comparison is shown in Figure \ref{fig:simulation_comparison} where the PLECS and SIMPLIS frequency responses are nearly identical. 
+PLECS' multitone and SIMPLIS' periodic operating point (POP) analysis methods differ in their implementations, but both are able to extract closely matching frequency responses of the modeled converter. 
+The parameters in the PLECS simulation were updated to match those in the SIMPLIS simulation provided to the author by Dr. Tian.
+
+\begin{figure}
+  \centering
+  \includegraphics[width=0.5\textwidth]{figures/SIMPLIS_PLECS_comparison.png}
+  \caption{Comparison of simulated frequency responses of the same converter implemented in PLECS and SIMPLIS circuit simulators. }
+  \label{fig:simulation_comparison}
+\end{figure}
+
+The source of the discrepancy in Figure \ref{fig:PLECS_Tian_comparison} was traced back to nonideal diode models in the PLECS simulation which the author adapted from a PLECS example. 
+The second-order resonant peak in visible in the ${F_s=1.0F_o}$ and ${F_s=0.8F_o}$ cases is very sensitive to rectifier damping, and the simulated diode losses in the PLECS example implementation were sufficient to fully damp the resonant peak predicted by the analytical model for an LLC converter with a lossless rectifier.
+With the discrepancy understood, the 1.5 MHz LLC converter was modeled next.
+
+\subsection{Modeling the 1.5 MHz LLC Converter}
+\label{sec:LLC_converter}
+
+The parameters in Table \ref{tab:llc_parameters} were used to model the 1.5 MHz LLC converter in the remainder of this paper. 
+This converter is designed to deliver 1500 W at 48 V from a 270 V input.
+The 1500 W operating point is at $F_s = 1.0 F_o$, so \cite{tian_equivalent_2020} Eqn. 14 ($F_s \ge F_o$) is used to model the plant. 
+In this 1.5 MHz LLC converter, a full-bridge inverter is used instead of the half-bridge inverter used in \cite{tian_equivalent_2020}.
+Due to the voltage-doubling effect of the full bridge inverter, the control-to-output plant transfer function $G_p(s) = \frac{v_o(s)}{\omega_s(s)}$ is a factor of two larger than the half-bridge case derived by Tian ~\cite{tian_equivalent_2020}, Eqn. 14. 
+A schematic of the new 1.5 MHz LLC converter with full-bridge inverter is shown in Figure \ref{fig:PLECS_FB_LLC}.
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|c|c|c|c|}
+\hline
+\textbf{Parameter} & \textbf{Value}  & \textbf{Description} \\ \hline
+$L_r$ & 2 $\mu H$ & Resonant inductor \\ \hline
+$L_m$ & 10 $\mu H$ & Magnetizing inductor \\ \hline
+$C_r$ & 5.6 $nF$ & Resonant capacitor \\ \hline
+$C_f$ & 100 $\mu F$ & Output filter capacitor \\ \hline
+$n_{pri}$ & 6 & Transformer primary turns \\ \hline
+$n_{sec}$ & 1 & Transformer secondary turns \\ \hline
+$R_{load}$ & 1.536 $\Omega$ & Load resistance \\ \hline
+$V_{o}$ & 48 $V$ & Output voltage \\ \hline
+$V_{g}$ & 270 $V$ & Input voltage \\ \hline
+$P_{o}$ & 1500 $W$ & Output power \\ \hline
+$F_{o} = \frac{1}{2\pi\sqrt(L_r C_r)}$ & 1.5 $MHz$ & Resonant tank frequency \\ \hline
+\end{tabular}
+\caption{LLC converter parameters used in the remainder of this paper.}
+\label{tab:llc_parameters}
+\end{table}
+
+\begin{figure}
+  \centering
+  \includegraphics[width=0.5\textwidth]{figures/PLECS_FB_LLC_schematic.png}
+  \caption{LLC converter with full-bridge inverter.}
+  \label{fig:PLECS_FB_LLC}
+\end{figure}
+
+Finally, the analytical and simulated models were compared for the 1.5 MHz LLC using the parameters shown in Table \ref{tab:llc_parameters}, and the resulting frequency responses are compared in Figure \ref{fig:MHZ_open_loop_plant_PLECS_validation}. 
+The agreement of the two models is excellent, and the analytical plant model is used for compensator design in the following section.
+
+\begin{figure}
+  \includegraphics[width=0.5\textwidth]{figures/MHz_open_loop_plant_PLECS_validation.png}
+  \caption{Cross-validation of plant frequency responses of $G_p(s)$ based on \cite{tian_equivalent_2020} and PLECS simulation for a full-bridge LLC converter using the parameters given in Table \ref{tab:llc_parameters}.}
+  \label{fig:MHZ_open_loop_plant_PLECS_validation}
+\end{figure}
+
+\section{Compensator Design}
+\label{sec:compensator_design}
+
+The open-loop plant transfer function corresponding to the LLC converter with parameters in Table \ref{tab:llc_parameters} is shown in Fig. \ref{fig:MHZ_open_loop_plant_PLECS_validation} and as a transfer function in (\ref{eq:open_loop_plant}).
+
+\begin{equ}[h]
+\begin{equation}
+G_p = 
+\frac{v_o(s)}{\omega_s(s)} = \frac{-1.401 \times 10^{12}}{9.959 \times 10^{6} s^2 + 7.23 \times 10^{10} s + 7.2 \times 10^{17}}
+\label{eq:open_loop_plant}
+\end{equation}
+\end{equ}
+
+The plant transfer function (\ref{eq:open_loop_plant}) contains a pole pair at the resonant frequency of the output capacitance and the effective tank inductance. 
 
 
-% An example of a floating table. Note that, for IEEE style tables, the
-% \caption command should come BEFORE the table and, given that table
-% captions serve much like titles, are usually capitalized except for words
-% such as a, an, and, as, at, but, by, for, in, nor, of, on, or, the, to
-% and up, which are usually not capitalized unless they are the first or
-% last word of the caption. Table text will default to \footnotesize as
-% the IEEE normally uses this smaller font for tables.
-% The \label must come after \caption as always.
-%
-%\begin{table}[!t]
-%% increase table row spacing, adjust to taste
-%\renewcommand{\arraystretch}{1.3}
-% if using array.sty, it might be a good idea to tweak the value of
-% \extrarowheight as needed to properly center the text within the cells
-%\caption{An Example of a Table}
-%\label{table_example}
-%\centering
-%% Some packages, such as MDW tools, offer better commands for making tables
-%% than the plain LaTeX2e tabular which is used here.
-%\begin{tabular}{|c||c|}
-%\hline
-%One & Two\\
-%\hline
-%Three & Four\\
-%\hline
-%\end{tabular}
-%\end{table}
+The controller $G_c$ was designed using the k-factor method \cite{venable_k_1983} as taught by Dr. Raja Ayannar \cite{ayannar_k-factor_2014,ayannar_k_2014}, with some minor modifications. The controller design steps are as follows:
 
+\begin{enumerate}
+  \item Determine the phase of the plant, $\phi_{sys}$ at $\omega_c$ from analytical small signal model (\ref{eq:open_loop_plant}).
+  \item Calculate phase boost $\phi_{boost}$ required, using $\phi_{boost} = PM_{desired} - \phi_{sys} - 90\degree$.
+  \item Calculate $k$, $\omega_z$, and $\omega_p$ as follows: $k = tan(\frac{\phi_{boost}}{2})$, $\omega_z = \frac{\omega_c}{k}$, and $\omega_p = k \omega_c$.
+  \item Calculate $K_c$, $K_c = \frac{\omega_c}{k|G_p(j\omega_c)|}$.
+\end{enumerate}
 
-% Note that the IEEE does not put floats in the very first column
-% - or typically anywhere on the first page for that matter. Also,
-% in-text middle ("here") positioning is typically not used, but it
-% is allowed and encouraged for Computer Society conferences (but
-% not Computer Society journals). Most IEEE journals/conferences use
-% top floats exclusively. 
-% Note that, LaTeX2e, unlike IEEE journals/conferences, places
-% footnotes above bottom floats. This can be corrected via the
-% \fnbelowfloat command of the stfloats package.
+The sign of the plant transfer function $G_p$ is negative, so $180\degree$ was added to $\phi_{sys}$ to compensate for its negative sign.
+The form of the type-II k-factor controller is
 
+\begin{equ}[h]
+\begin{equation}
+  G_c = \frac{K_c}{s} \frac{1 + \frac{s}{\omega_z}}{1 + \frac{s}{\omega_p}}
+\label{eq:type_II_k_factor}
+\end{equation}
+\end{equ}
 
+The forward-path transfer function $G_c G_p$ is the product of (\ref{eq:type_II_k_factor}) and (\ref{eq:open_loop_plant}).
 
+The phase margin $PM_{desired}$ and the crossover frequency $\omega_c$ were swept over the ranges $\{ 60,90 \} \degree$ 
+and $\{ 300,5000 \} Hz$ respectively and the closed loop step response and gain margin were observed. 
+Fig. \ref{fig:oltf} shows the open-loop transfer function $G_c G_p$ for a type-II k-factor controller with $PM_{desired} = 85\degree$ and $f_c = 1000$ Hz.
+The gain margin is more than 6 dB with the crossover frequency at 1000 Hz.
+Further increasing the crossover frequency reduces the gain margin unacceptably.
+
+\begin{figure}
+  \includegraphics[width=0.5\textwidth]{figures/85deg_PM_at_1000_Hz_OLTF.png}
+  \caption{$G_c G_p$ where $G_c$ is a type-II k-factor controller with $PM_{desired} = 85\degree$ and $f_c = 1000$ Hz.}
+  \label{fig:oltf}
+\end{figure}
+
+The step response of three controller variants is shown in Fig. \ref{fig:step_response_for_different_fc}.
+The instability due to decreasing gain margin is visible in the third case $f_c = 5000$ Hz.
+The best closed loop response was found at $PM_{desired} = 85\degree$ and $f_c = 1000$ Hz, $(\omega_c = 6283 \frac{rad}{s})$.
+
+\begin{figure}
+  \includegraphics[width=0.5\textwidth]{figures/step_response_for_different_fc.png}
+  \caption{Closed-loop step response for three crossover frequency values $f_c$.}
+  \label{fig:step_response_for_different_fc}
+\end{figure}
+
+Finally, the closed-loop frequency responses of the analytical model and the PLECS simulation were compared. 
+The results are shown in Figure \ref{fig:closed_loop_freq_response}.
+
+\begin{figure}
+  \includegraphics[width=0.5\textwidth]{figures/closed_loop_comparison.png}
+  \caption{Comparison of $G_{cl} = \frac{G_c G_p}{1 + G_c G_p}$ for the analytical model (solid line) and PLECS simulation (dashed line).}
+  \label{fig:closed_loop_freq_response}
+\end{figure}
+
+\section{Delay Modeling}
+
+The original aim of this project was to find which of $\{ G_c(s), G_p(s), G_D(s) \} $ limits the control bandwidth of the LLC converter.
+Section \ref{sec:compensator_design} showed that the plant $G_p(s)$ limits the control bandwidth to approximately 1 kHz due to the lightly-damped plant double pole at approximately 40 kHz.
+As the controller bandwidth is increased beyond 1 kHz, proximity to the double plant pole at 40 kHz results in a diminishing gain margin and closed-loop stability is compromised.
+
+Practically speaking, a 1 kHz bandwidth controller is trivial to implement on the TMS320F28379D SOC, and further analysis of $G_D$ is not necessary.
+However, the author has included a brief analysis of the delay model for completeness.
+Also, an alternate 1.5 MHz LLC design in which the size of the filter capacitor $C_f$ is decreased in order to push the 40 kHz plant double pole to a higher frequency is of interest to the author.
+A sufficient decrease in filter capacitance $C_f$ will eventually result in the control bandwidth being limited by controller delays $G_D$ instead of plant dynamics $G_p$.
+
+\subsection{Analytical Delay Model}
+
+Using chapter 6.8 of \cite{franklin_feedback_2019}, the effects of time delays in the controller are modeled using a Pade approximation (\ref{eq:delay_approximation}).
+
+\begin{equ}[h]
+\begin{equation}
+    \angle G_D = -\omega T_d 
+\label{eq:delay_approximation}
+\end{equation}
+\end{equ}
+
+where $T_d$ is the delay time, $\omega$ is the frequency in $\frac{rad}{s}$, and $\angle G_D$ is the phase delay in $rad$.
+
+For an embedded control application, sensing, computation and actuation are designed to run at a fixed frequency with deterministic execution time.
+Fig. \ref{fig:pade_delay_for_different_loop_frequencies} shows the phase delay contributed for four candidate loop periods of $T = \{1, 2, 10, 20\} \mu s$.
+A phase delay of more than $10\degree$ is considered undesirable.
+It can be seen from Figure \ref{fig:pade_delay_for_different_loop_frequencies} that even the slowest considered loop period of 20 $\mu s$ does not contribute significant phase delay 1 kHz.
+
+\begin{figure}
+  \includegraphics[width=0.5\textwidth]{figures/pade_delay_for_different_loop_frequencies.png}
+  \caption{Approximation of delay angle contribution $\angle G_d$ versus frequency for four loop frequencies calculated using (\ref{eq:delay_approximation}).}
+  \label{fig:pade_delay_for_different_loop_frequencies}
+\end{figure}
+
+For control bandwidths exceeding 10 kHz, the phase delay contribution will become significant. This is the subject of future analysis.
 
 \section{Conclusion}
-The conclusion goes here.
 
-
-
-
+The analytical transfer functions of the LLC converter provided in \cite{tian_equivalent_2020} were validated against a PLECS simulation.
+A 1.5 MHz LLC was modeled and its plant transfer function used to design a type-II k-factor controller.
+It was found that the control bandwidth is limited by the plant double pole at approximately 40 kHz, and that delays due to sensing, computation, and actuation do not limit the control bandwidth of the 1.5 MHz LLC converter studied here.
 
 % if have a single appendix:
 %\appendix[Proof of the Zonklar Equations]
@@ -295,22 +311,13 @@ The conclusion goes here.
 %
 
 
-\appendices
-\section{Proof of the First Zonklar Equation}
-Appendix one text goes here.
-
-% you can choose not to have a title for an appendix
-% if you want by leaving the argument blank
-\section{}
-Appendix two text goes here.
 
 
 % use section* for acknowledgment
-\section*{Acknowledgment}
+\section*{Acknowledgments}
 
-
-The authors would like to thank...
-
+Dr. Shuilin Tian provided crucial support in reproducing his results. 
+Dr. Jennie Si gave valuable feedback and guidance during this project.
 
 % Can use something like this to put references on a page
 % by themselves when using endfloat and the captionsoff option.
